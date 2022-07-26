@@ -44,9 +44,12 @@ export class AuthService {
    * @returns 
    */
   async loginRequestSigned(loginRequestSignature: LoginRequestSignature): Promise<any> {
+    //make sure there's a login request for the address provided
     const found: LoginRequest = await this.loginRequestRepository.findOneBy({address: loginRequestSignature.address})
     if (found === null) return {result: false, reason: `There is no pending login request for address ${loginRequestSignature.address}`}
-    let challenge_matched = false; // make sure challenge is located in the message
+
+    // make sure challenge is located in the message
+    let challenge_matched = false; 
     const lines: String[] = loginRequestSignature.message.split("\n")
     for (let i=0; i<lines.length; i++) {
       const kv: String[] = lines[i].split(' ', 2)
@@ -57,8 +60,11 @@ export class AuthService {
       }
     }
     if (!challenge_matched) return {result: false, reason: "The challenge parameter was not located in the signed message"}
+
+    //challenge is in message and login request found, check the signature
     const checkAddress: String = verifyMessage(loginRequestSignature.message, loginRequestSignature.signature);
     if (checkAddress !== loginRequestSignature.address) return {result: false, reason: "Signature could not be verified"}
+
     //user has successfully signed vs our challenge //log  in, or create a new `user` entry
     await this.loginRequestRepository.delete({id: found.id}) //delete this login request db entry
     const found2: User = await this.userRepository.findOneBy({crypto_address: loginRequestSignature.address})
@@ -66,7 +72,7 @@ export class AuthService {
       const user = new User();
       user.crypto_address = loginRequestSignature.address
       user.user_id = ""
-      user.first_name = "Anon"
+      user.first_name = "Anonymous"
       user.last_name = ""
       user.api_token = await hash(loginRequestSignature.signature, 10)
       return { result: true, data: (await this.userRepository.save(user))}
