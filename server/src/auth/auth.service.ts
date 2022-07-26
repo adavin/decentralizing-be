@@ -40,7 +40,7 @@ export class AuthService {
    * Signed message format:
    * `Challenge ${challenge}`
    * 
-   * @param data 
+   * @param loginRequestSignature 
    * @returns 
    */
   async loginRequestSigned(loginRequestSignature: LoginRequestSignature): Promise<any> {
