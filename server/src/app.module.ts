@@ -1,7 +1,10 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-require('dotenv').config()
+import { FaucetModule } from './faucet/faucet.module'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 
 @Module({
   imports: [
@@ -17,7 +20,8 @@ require('dotenv').config()
       autoLoadEntities: true,
     }),
     //UsersModule,
-    AuthModule
+    AuthModule,
+    FaucetModule
   ],
 })
 export class AppModule {}

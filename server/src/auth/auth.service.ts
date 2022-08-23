@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -24,15 +25,15 @@ export class AuthService {
    */
   async loginRequest (loginRequestDto: LoginRequestDto): Promise<LoginRequest> {
     const found: LoginRequest = await this.loginRequestRepository.findOneBy({address: loginRequestDto.address})
-      if (found === null) {
-        const loginRequest: LoginRequest = new LoginRequest()
-        loginRequest.address = loginRequestDto.address
-        loginRequest.timestamp = loginRequestDto.timestamp
-        loginRequest.challenge = Math.random().toString(36).substring(2, 15)
-        return this.loginRequestRepository.save(loginRequest)
+      if (found !== null) {
+        found.timestamp = loginRequestDto.timestamp
+        return this.loginRequestRepository.save(found)
       }
-      found.timestamp = loginRequestDto.timestamp
-      return this.loginRequestRepository.save(found)
+      const loginRequest: LoginRequest = new LoginRequest()
+      loginRequest.address = loginRequestDto.address
+      loginRequest.timestamp = loginRequestDto.timestamp
+      loginRequest.challenge = Math.random().toString(36).substring(2, 15)
+      return this.loginRequestRepository.save(loginRequest)
   }
 
   /**
@@ -50,9 +51,9 @@ export class AuthService {
 
     // make sure challenge is located in the message
     let challenge_matched = false; 
-    const lines: String[] = loginRequestSignature.message.split("\n")
+    const lines: string[] = loginRequestSignature.message.split("\n")
     for (let i=0; i<lines.length; i++) {
-      const kv: String[] = lines[i].split(' ', 2)
+      const kv: string[] = lines[i].split(' ', 2)
       //console.log(kv[0].toLowerCase(), kv[1], found.challenge)
       if (kv.length === 2 && kv[0].toLowerCase() === 'challenge' && kv[1] === found.challenge) {
           challenge_matched = true
@@ -62,7 +63,7 @@ export class AuthService {
     if (!challenge_matched) return {result: false, reason: "The challenge parameter was not located in the signed message"}
 
     //challenge is in message and login request found, check the signature
-    const checkAddress: String = verifyMessage(loginRequestSignature.message, loginRequestSignature.signature);
+    const checkAddress: string = verifyMessage(loginRequestSignature.message, loginRequestSignature.signature);
     if (checkAddress !== loginRequestSignature.address) return {result: false, reason: "Signature could not be verified"}
 
     //user has successfully signed vs our challenge //log  in, or create a new `user` entry
