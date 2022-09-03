@@ -1,21 +1,4 @@
 /* eslint-disable prettier/prettier */
-export class CreateUserDto {
-    firstName: string;
-    lastName: string;
-  }
-  
-  export class LoginRequestDto {
-    address: string;
-    timestamp: string;
-  }
-
-  export class LoginRequestSignature {
-    address: string;
-    message: string;
-    signature: string;
-  }
-
-  
   export class FaucetRequestDto {
     user_id: number;
     api_token: string;

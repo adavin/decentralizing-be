@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { FaucetModule } from './faucet/faucet.module'
+import { TokensModule } from './tokens/tokens.module'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
@@ -21,7 +22,8 @@ require('dotenv').config();
     }),
     //UsersModule,
     AuthModule,
-    FaucetModule
+    FaucetModule,
+    TokensModule,
   ],
 })
 export class AppModule {}

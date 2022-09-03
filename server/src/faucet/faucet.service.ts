@@ -1,11 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {   MoreThan, Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { FaucetRequestDto, FaucetRequestResponseDto} from './dto/faucet.dto';
 import { FaucetRequest } from './faucet.entity';
 import { User } from 'src/auth/auth.entity';
-import { Connection } from 'mysql2';
 import { ethers } from 'ethers';
 
 @Injectable()
@@ -53,8 +52,9 @@ export class FaucetService {
     }
 
     //Check if the faucet has enough funds to cover
-    
 
+
+    //Using chainId=5 (Goerli)
     const provider:ethers.providers.InfuraProvider = new ethers.providers.InfuraProvider(5, process.env.INFURA_API_KEY)
     const signer: ethers.Wallet = new ethers.Wallet(process.env.FAUCET_PRIVATE_KEY, provider);
     const tx: ethers.providers.TransactionResponse = await signer.sendTransaction({
