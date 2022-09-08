@@ -76,25 +76,5 @@ export class TokenService {
     const userTokens = await this.userTokenRepository.findBy({user_id: req.user_id})
     return {errorCode: 0, response: 'Success', result: true, data: userTokens} 
   }
-  /*
-  create(createUserDto: CreateUserDto): Promise<Auth> {
-    const user = new Auth()
-    user.first_name = createUserDto.firstName
-    user.last_name = createUserDto.lastName
-
-    return this.authRepository.save(user)
-  }
-
-  async findAll(): Promise<Auth[]> {
-    return this.authRepository.find()
-  }
-
-  findOne(id: number): Promise<Auth> {
-    return this.authRepository.findOneBy({ id: id });
-  }
-
-  async remove(id: number): Promise<void> {
-    await this.authRepository.delete(id);
-  }
-  */
+  
 }

@@ -82,26 +82,4 @@ export class AuthService {
     return {result: true, data: (await this.userRepository.save(found2))}
   }
 
-
-  /*
-  create(createUserDto: CreateUserDto): Promise<Auth> {
-    const user = new Auth()
-    user.first_name = createUserDto.firstName
-    user.last_name = createUserDto.lastName
-
-    return this.authRepository.save(user)
-  }
-
-  async findAll(): Promise<Auth[]> {
-    return this.authRepository.find()
-  }
-
-  findOne(id: number): Promise<Auth> {
-    return this.authRepository.findOneBy({ id: id });
-  }
-
-  async remove(id: number): Promise<void> {
-    await this.authRepository.delete(id);
-  }
-  */
 }
