@@ -2,11 +2,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
-import { FaucetRequestDto, FaucetRequestResponseDto, NewUserTokenDto, NewUserTokenResponseDto} from './dto/tokens.dto';
+import { GetUserTokensDto, GetUserTokensResponseDto, NewUserTokenDto, NewUserTokenResponseDto} from './dto/tokens.dto';
 import { UserToken } from './tokens.entity';
 import { User } from 'src/auth/auth.entity';
-import { ethers } from 'ethers';
 
+/**
+ * 
+ */
 @Injectable()
 export class TokenService {
   constructor(
@@ -62,19 +64,36 @@ export class TokenService {
     return response
   }
 
-  async getUserTokens(req: any): Promise<any> {
+  /**
+   * 
+   * @param getUserTokensDto 
+   * @returns 
+   */
+  async getUserTokens(getUserTokensDto: GetUserTokensDto): Promise<GetUserTokensResponseDto> {
     //check valid -> api and user 
-    if (req.api_token === '' || req.user_id <= 0) return {errorCode: 1, response: 'Empty API token or invalid user id.', result: false}
+    const response = new GetUserTokensResponseDto()
+    if (getUserTokensDto.api_token === '' || getUserTokensDto.user_id <= 0) { 
+      response.errorCode = 1,
+      response.response = 'Empty API token or invalid user id.'
+      return response
+    }
 
     //Check valid user/api token
-    const foundUser: User = await this.userRepository.findOneBy({id: req.user_id, api_token: req.api_token})
+    const foundUser: User = await this.userRepository.findOneBy({id: getUserTokensDto.user_id, api_token: getUserTokensDto.api_token})
 
     //Invalid User and/or api token
-    if (foundUser === null) 
-      return {errorCode: 1, response: 'User or API token not found.', result: false}
-  
-    const userTokens = await this.userTokenRepository.findBy({user_id: req.user_id})
-    return {errorCode: 0, response: 'Success', result: true, data: userTokens} 
+    if (foundUser === null) {
+      response.errorCode = 1
+      response.response = 'User or API token not found.'
+      return response
+    }
+
+    //return success + array of user created tokens
+    const userTokens = await this.userTokenRepository.findBy({user_id: getUserTokensDto.user_id})
+    response.response = 'Success'
+    response.result = true
+    response.data = userTokens
+    return response
   }
   
 }

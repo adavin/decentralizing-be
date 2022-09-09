@@ -2,17 +2,11 @@
 import {
   Body,
   Controller,
-  Delete,
-  Get,
-  Param,
   Post,
-  ParseIntPipe,
 } from '@nestjs/common';
 import {
-  FaucetRequestDto, FaucetRequestResponseDto,
   NewUserTokenDto, NewUserTokenResponseDto
 } from './dto/tokens.dto';
-import { UserToken } from './tokens.entity';
 import { TokenService } from './tokens.service';
 
 @Controller('tokens')
