@@ -44,7 +44,7 @@ export class TokenService {
     const foundToken: UserToken = await this.userTokenRepository.findOneBy({id: newUserTokenDto.user_id, tokenAddress: newUserTokenDto.token_address})
     if (foundToken !== null) {
       response.errorCode = 1
-      response.response = 'This token already exists in our database.'
+      response.response = 'This token already exists in the database.'
       return response
     }
 
@@ -60,7 +60,7 @@ export class TokenService {
     this.userTokenRepository.save(userToken)
 
     response.result = true
-    response.response = 'Success! New token created.'
+    response.response = 'Success! New token stored.'
     return response
   }
 

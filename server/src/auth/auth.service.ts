@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto, LoginRequestDto, LoginRequestSignature } from './dto/auth.dto';
+import { LoginRequestDto, LoginRequestSignature } from './dto/auth.dto';
 import { LoginRequest, User } from './auth.entity';
 import { verifyMessage } from 'ethers/lib/utils';
 import { hash } from 'bcrypt'
@@ -24,6 +24,8 @@ export class AuthService {
    * @returns 
    */
   async loginRequest (loginRequestDto: LoginRequestDto): Promise<LoginRequest> {
+    //TODO validate address input
+    
     const found: LoginRequest = await this.loginRequestRepository.findOneBy({address: loginRequestDto.address})
       if (found !== null) {
         found.timestamp = loginRequestDto.timestamp
@@ -38,7 +40,7 @@ export class AuthService {
 
   /**
    * 
-   * Signed message format:
+   * Required signed message format:
    * `Challenge ${challenge}`
    * 
    * @param loginRequestSignature 

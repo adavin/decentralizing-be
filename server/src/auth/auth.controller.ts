@@ -9,7 +9,6 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import {
-  CreateUserDto,
   LoginRequestDto,
   LoginRequestSignature,
 } from './dto/auth.dto';

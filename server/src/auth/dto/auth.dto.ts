@@ -1,9 +1,4 @@
 /* eslint-disable prettier/prettier */
-export class CreateUserDto {
-    firstName: string;
-    lastName: string;
-  }
-  
   export class LoginRequestDto {
     address: string;
     timestamp: string;
